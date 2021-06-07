@@ -62,7 +62,7 @@ app.use(async (ctx, next) => {
 
 
 
-//Задача 6.2 из Life-cycles
+//Задача 6.2 из React Life-cycles
 
 const notes = [{id: 9999, content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam luctus sagittis magna, sit amet rhoncus nunc commodo eget. Aenean vitae ipsum quis lacus volutpat interdum in vel est.'},
  {id: 99999, content: 'Nulla placerat purus in erat pellentesque, ornare pretium nunc auctor. Ut molestie volutpat nibh, vel congue ante commodo porttitor.'}];
@@ -91,6 +91,48 @@ router.delete('/notes/:id', async(ctx, next) => {
     const index = notes.findIndex(o => o.id === noteId);
     if (index !== -1) {
         notes.splice(index, 1);
+    }
+    ctx.response.status = 204;
+});
+
+//Задача 9.2 из React Router
+
+let posts = [];
+let postRouteId = 1;
+
+setInterval(() => {
+  //posts.length = 0;
+  console.log('-------');
+  //posts.push('ok');
+}, 60000)
+
+
+router.get('/posts', async (ctx, next) => {
+    console.log('give me posts');
+    console.log(posts)
+    ctx.response.body = posts;
+});
+
+router.post('/posts', async(ctx, next) => {
+    console.log('I am giving you post')
+    const {id, content} = ctx.request.body;
+    if (id !== 0) {
+        posts = posts.map(o => o.id !== id ? o : {...o, content: content});
+        ctx.response.status = 204;
+        return;
+    }
+
+    posts.push({...ctx.request.body, id: postRouteId++, created: Date.now()});
+    console.log(posts)
+    ctx.response.status = 204;
+});
+
+router.delete('/posts/:id', async(ctx, next) => {
+    console.log('delete post')
+    const postId = Number(ctx.params.id);
+    const index = posts.findIndex(o => o.id === postId);
+    if (index !== -1) {
+        posts.splice(index, 1);
     }
     ctx.response.status = 204;
 });

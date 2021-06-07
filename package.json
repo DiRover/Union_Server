@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "prestart": "npm install",
-    "start": "nodemon server.js",
+    "server": "nodemon server.js",
     "watch": "nodemon -w server.js"
   },
   "author": "coursar",
   "license": "ISC",
   "dependencies": {
+    "@fractalsoftware/random-avatar-generator": "^1.0.6",
+    "facesjs": "^3.4.0",
     "faker": "^5.5.3",
     "koa": "^2.13.1",
     "koa-body": "^4.2.0",
