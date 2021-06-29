@@ -107,6 +107,7 @@ setInterval(() => {
 }, 60000)
 
 
+
 router.get('/posts', async (ctx, next) => {
     console.log('give me posts');
     console.log(posts)
@@ -282,6 +283,24 @@ router.get('/api/check-email', async (ctx, next) => {
     available: email.includes('@') && !email.startsWith('admin')
   }
 });
+
+
+
+//задача 12.2 из AHJ WORKERS
+const slow = require('koa-slow');
+app.use(slow({
+  delay: 5000
+}));
+const news = {
+  new: 'first'
+}
+
+router.get('/news', async (ctx, next) => {
+  
+  ctx.response.body = news;
+});
+
+
 
 app.use(router.routes()).use(router.allowedMethods());
 
