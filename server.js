@@ -11,6 +11,9 @@ const cors = require('koa2-cors');
 const Router = require('koa-router');
 const router = new Router();
 
+
+const RandomTextGenerator=require("random-text-generator");
+
 const faker = require('faker');
 faker.locale = "fi";
 /*
@@ -286,14 +289,29 @@ router.get('/api/check-email', async (ctx, next) => {
 
 
 
+
 //задача 12.2 из AHJ WORKERS
 const slow = require('koa-slow');
 app.use(slow({
   delay: 5000
 }));
-const news = {
-  new: 'first'
-}
+const news = [
+  {
+    name: faker.fake("{{name.firstName}}"),
+    description: faker.lorem.text(),
+    genre: faker.music.genre()
+  },
+  {
+    name: faker.fake("{{name.firstName}}"),
+    description: faker.lorem.text(),
+    genre: faker.music.genre()
+  },
+  {
+    name: faker.fake("{{name.firstName}}"),
+    description: faker.lorem.text(),
+    genre: faker.music.genre()
+  }
+]
 
 router.get('/news', async (ctx, next) => {
   
