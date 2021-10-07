@@ -319,6 +319,37 @@ router.get('/news', async (ctx, next) => {
 });
 
 
+//Задача 11.1 из RA REDUX-OBSERVABLE
+
+const skills = [
+    { id: nextId++, name: "React" },
+    { id: nextId++, name: "Redux" },
+    { id: nextId++, name: "Redux Thunk" },
+    { id: nextId++, name: "RxJS" },
+    { id: nextId++, name: "Redux Observable" },
+    { id: nextId++, name: "Redux Saga" },
+];
+
+let isEven = true;
+router.get('/api/search', async (ctx, next) => {
+    //if (Math.random() > 0.75) {
+    //    ctx.response.status = 500;
+    //    return;
+    //}
+
+    const { q } = ctx.request.query;
+    console.log(q);
+
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+
+            const response = skills.filter(o => o.name.toLowerCase().startsWith(q.toLowerCase()))
+            ctx.response.body = response;
+            resolve();
+        }, isEven ? 1 * 1000 : 5 * 1000);
+        isEven = !isEven;
+    });
+});
 
 app.use(router.routes()).use(router.allowedMethods());
 
