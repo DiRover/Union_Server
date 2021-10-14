@@ -292,9 +292,9 @@ router.get('/api/check-email', async (ctx, next) => {
 
 //задача 12.2 из AHJ WORKERS
 const slow = require('koa-slow');
-app.use(slow({
-  delay: 5000
-}));
+//app.use(slow({
+//  delay: 5000
+//}));
 const news = [
   {
     name: faker.fake("{{name.firstName}}"),
@@ -350,6 +350,30 @@ router.get('/api/search', async (ctx, next) => {
         isEven = !isEven;
     });
 });
+
+//Задача 11.2 из RA REDUX-OBSERVABLE
+
+const services = [
+    { id: nextId++, name: "React" },
+    { id: nextId++, name: "Redux" },
+    { id: nextId++, name: "Redux Thunk" },
+    { id: nextId++, name: "RxJS" },
+    { id: nextId++, name: "Redux Observable" },
+    { id: nextId++, name: "Redux Saga" },
+];
+
+router.get('/api/search/services', async (ctx, next) => {
+    //if (Math.random() > 0.75) {
+    //    ctx.response.status = 500;
+    //    return;
+    //}
+
+    console.log('tut')
+
+    ctx.response.body = services;
+    
+});
+
 
 app.use(router.routes()).use(router.allowedMethods());
 
