@@ -374,6 +374,22 @@ router.get('/api/search/services', async (ctx, next) => {
     
 });
 
+router.get('/api/search/sedrvices/:hid', async (ctx, next) => {
+  const id = ctx.params.id;
+
+  const servicesDescription = services.map((service) => {
+    return { id: service.id, description: faker.lorem.text() }
+  });
+
+  const resp = servicesDescription.filter((item) => {
+    if (item.id === id) return item;
+  });
+
+  console.log(resp);
+
+  ctx.response.body = services;
+})
+
 
 app.use(router.routes()).use(router.allowedMethods());
 
