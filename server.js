@@ -292,9 +292,9 @@ router.get('/api/check-email', async (ctx, next) => {
 
 //задача 12.2 из AHJ WORKERS
 const slow = require('koa-slow');
-//app.use(slow({
-//  delay: 5000
-//}));
+app.use(slow({
+  delay: 5000
+}));
 const news = [
   {
     name: faker.fake("{{name.firstName}}"),
@@ -332,10 +332,10 @@ const skills = [
 
 let isEven = true;
 router.get('/api/search', async (ctx, next) => {
-  //if (Math.random() > 0.75) {
-  //    ctx.response.status = 500;
-  //    return;
-  //}
+  if (Math.random() > 0.75) {
+      ctx.response.status = 500;
+      return;
+  }
 
   const { q } = ctx.request.query;
   console.log(q);
@@ -362,30 +362,34 @@ const services = [
   { id: nextId++, name: "Redux Saga" },
 ];
 
-router.get('/api/search/services', async (ctx, next) => {
-  //if (Math.random() > 0.75) {
-  //    ctx.response.status = 500;
-  //    return;
-  //}
+const servicesDescription = services.map((service) => {
+  return { id: service.id, description: faker.lorem.paragraphs(), title: service.name }
+});
 
-  console.log('tut')
+router.get('/api/search/services', async (ctx, next) => {
+  if (Math.random() > 0.75) {
+    ctx.response.status = 500;
+    return;
+  }
 
   ctx.response.body = services;
 
 });
 
 router.get('/api/search/services/:id', async (ctx, next) => {
+  const x = Math.random()
+  console.log(x)
+  if (x > 0.75) {
+    ctx.response.status = 500;
+    return;
+  }
   const id = ctx.params.id;
-
-  const servicesDescription = services.map((service) => {
-    return { id: service.id, description: faker.lorem.text() }
-  });
 
   const resp = servicesDescription.filter((item) => {
     if (item.id == id) return item; //id типа string, по этому делаю не глубокое сравнение
   });
 
-  ctx.response.body = resp;
+  ctx.response.body = resp[0];
 })
 
 
