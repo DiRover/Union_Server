@@ -16,9 +16,9 @@ const RandomTextGenerator = require("random-text-generator");
 
 const faker = require('faker');
 faker.locale = "fi";
-/*
+
 app.use(cors());
-app.use(koaBody({json: true}));*/
+app.use(koaBody({json: true}));
 
 app.use(cors());
 app.use(koaBody({
@@ -291,10 +291,10 @@ router.get('/api/check-email', async (ctx, next) => {
 
 
 //задача 12.2 из AHJ WORKERS
-const slow = require('koa-slow');
-app.use(slow({
-  delay: 5000
-}));
+// const slow = require('koa-slow');
+// app.use(slow({
+//   delay: 5000
+// }));
 const news = [
   {
     name: faker.fake("{{name.firstName}}"),
@@ -390,7 +390,49 @@ router.get('/api/search/services/:id', async (ctx, next) => {
   });
 
   ctx.response.body = resp[0];
-})
+});
+
+// Задача 11.3 из RA REDUX-OBSERVABLE
+
+const newsRA = JSON.parse(fs.readFileSync('./news.json')); 
+const limit = 5;
+
+function fortune(ctx, body = null, status = 200) {
+  return new Promise((resolve, reject) => {
+      setTimeout(() => {
+          if (Math.random() > 0.3) {
+              ctx.response.status = status;
+              ctx.response.body = body;
+              resolve();
+              return;
+          }
+
+          reject(new Error('Something bad happened'));
+      }, 3 * 1000);
+  })
+}
+
+router.get('/api/ra/news', async (ctx, next) => {
+  const {lastSeenId} = ctx.request.query;
+  if (lastSeenId === undefined) {
+      return fortune(ctx, newsRA.slice(0, limit)); 
+  }
+
+  const id = Number(lastSeenId);
+  if (Number.isNaN(id)) {
+      const status = 400;
+      return fortune(ctx, null, status);
+  }
+
+  const index = newsRA.findIndex(o => o.id === id);
+  if (index === -1) {
+      const status = 404;
+      return fortune(ctx, null, status);
+  }
+
+  const body = newsRA.slice(index + 1, index + 1 + limit);
+  return fortune(ctx, body);
+});
 
 
 app.use(router.routes()).use(router.allowedMethods());
