@@ -414,6 +414,7 @@ function fortune(ctx, body = null, status = 200) {
 
 router.get('/api/ra/news', async (ctx, next) => {
   const {lastSeenId} = ctx.request.query;
+  console.log(lastSeenId);
   if (lastSeenId === undefined) {
       return fortune(ctx, newsRA.slice(0, limit)); 
   }
