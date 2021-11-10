@@ -345,11 +345,11 @@ function fortune(ctx, body = null, status = 200) {
     })
 }
 
-router.get('/api/thunk_services', async (ctx, next) => {
+router.get('/ra11/api/services', async (ctx, next) => {
     const body = thunkServices.map(o => ({id: o.id, name: o.name, price: o.price}))
     return fortune(ctx, body);
 });
-router.get('/api/thunk_services/:id', async (ctx, next) => {
+router.get('/ra11/api/services/:id', async (ctx, next) => {
     const id = Number(ctx.params.id);
     const index = thunkServices.findIndex(o => o.id === id);
     if (index === -1) {
@@ -359,7 +359,7 @@ router.get('/api/thunk_services/:id', async (ctx, next) => {
     const body = thunkServices[index];
     return fortune(ctx, body);
 });
-router.post('/api/thunk_services', async (ctx, next) => {
+router.post('/ra11/api/services', async (ctx, next) => {
     const id = ctx.request.body.id;
     if (id !== 0) {
         const index = thunkServices.findIndex(o => o.id === id);
@@ -375,7 +375,7 @@ router.post('/api/thunk_services', async (ctx, next) => {
     const status = 204;
     return fortune(ctx, null, status);
 });
-router.delete('/api/thunk_services/:id', async (ctx, next) => {
+router.delete('/ra11/api/services/:id', async (ctx, next) => {
     const id = Number(ctx.params.id);
     const index = thunkServices.findIndex(o => o.id === id);
     if (index === -1) {
