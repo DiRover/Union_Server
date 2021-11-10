@@ -319,6 +319,76 @@ router.get('/news', async (ctx, next) => {
 });
 
 
+//Задача 11.1 из RA REDUX-THUNK
+
+let thunkId = 1;
+const thunkServices = [
+    { id: thunkId++, name: 'Замена стекла', price: 21000, content: 'Стекло оригинал от Apple'},
+    { id: thunkId++, name: 'Замена дисплея', price: 25000, content: 'Дисплей оригинал от Foxconn'},
+    { id: thunkId++, name: 'Замена аккумулятора', price: 4000, content: 'Новый на 4000 mAh'},
+    { id: thunkId++, name: 'Замена микрофона', price: 2500, content: 'Оригинальный от Apple'},
+];
+
+
+function fortune(ctx, body = null, status = 200) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            if (Math.random() > 0.25) {
+                ctx.response.status = status;
+                ctx.response.body = body;
+                resolve();
+                return;
+            }
+
+            reject(new Error('Something bad happened'));
+        }, 3 * 1000);
+    })
+}
+
+router.get('/api/thunk_services', async (ctx, next) => {
+    const body = thunkServices.map(o => ({id: o.id, name: o.name, price: o.price}))
+    return fortune(ctx, body);
+});
+router.get('/api/thunk_services/:id', async (ctx, next) => {
+    const id = Number(ctx.params.id);
+    const index = thunkServices.findIndex(o => o.id === id);
+    if (index === -1) {
+        const status = 404;
+        return fortune(ctx, null, status);
+    }
+    const body = thunkServices[index];
+    return fortune(ctx, body);
+});
+router.post('/api/thunk_services', async (ctx, next) => {
+    const id = ctx.request.body.id;
+    if (id !== 0) {
+        const index = thunkServices.findIndex(o => o.id === id);
+        if (index === -1) {
+            const status = 404;
+            return fortune(ctx, null, status);
+        }
+        thunkServices[index] = ctx.request.body;
+        return fortune(ctx, null, 204);
+    }
+    
+    thunkServices.push({ ...ctx.request.body, id: thunkId++ });
+    const status = 204;
+    return fortune(ctx, null, status);
+});
+router.delete('/api/thunk_services/:id', async (ctx, next) => {
+    const id = Number(ctx.params.id);
+    const index = thunkServices.findIndex(o => o.id === id);
+    if (index === -1) {
+        const status = 404;
+        return fortune(ctx, null, status);
+    }
+    thunkServices.splice(index, 1);
+    const status = 204;
+    return fortune(ctx, null, status);
+});
+
+
+
 //Задача 11.1 из RA REDUX-OBSERVABLE
 
 const skills = [
