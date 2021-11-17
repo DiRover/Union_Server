@@ -18,7 +18,6 @@ const faker = require('faker');
 faker.locale = "fi";
 
 app.use(cors());
-app.use(koaBody({json: true}));
 
 app.use(cors());
 app.use(koaBody({
